@@ -344,26 +344,10 @@ function ComoFunciona() {
             Como funciona
           </h2>
           <div className="relative mt-8 h-[10rem] sm:h-[12rem]">
-            {passos.map((p, i) => {
-              const start = i / passos.length;
-              const end = (i + 1) / passos.length;
-              const opacity = useTransform(
-                scrollYProgress,
-                [start - 0.06, start + 0.04, end - 0.05, end + 0.02],
-                [0, 1, 1, 0],
-              );
-              const y = useTransform(scrollYProgress, [start, end], [24, -24]);
-              return (
-                <motion.div key={p.n} style={{ opacity, y }} className="absolute inset-0">
-                  <span className="font-display text-5xl font-bold text-accent sm:text-6xl">
-                    {p.n}
-                  </span>
-                  <p className="mt-4 max-w-xl font-display text-2xl leading-snug font-semibold text-brand-foreground sm:text-4xl">
-                    {p.t}
-                  </p>
-                </motion.div>
-              );
-            })}
+            {passos.map((p, i) => (
+              <Passo key={p.n} passo={p} index={i} progress={scrollYProgress} />
+            ))}
+
           </div>
         </div>
       </div>
