@@ -355,7 +355,36 @@ function ComoFunciona() {
   );
 }
 
+function Passo({
+  passo,
+  index,
+  progress,
+}: {
+  passo: { n: string; t: string };
+  index: number;
+  progress: MotionValue<number>;
+}) {
+  const start = index / passos.length;
+  const end = (index + 1) / passos.length;
+  const opacity = useTransform(
+    progress,
+    [start - 0.06, start + 0.04, end - 0.05, end + 0.02],
+    [0, 1, 1, 0],
+  );
+  const y = useTransform(progress, [start, end], [24, -24]);
+
+  return (
+    <motion.div style={{ opacity, y }} className="absolute inset-0">
+      <span className="font-display text-5xl font-bold text-accent sm:text-6xl">{passo.n}</span>
+      <p className="mt-4 max-w-xl font-display text-2xl leading-snug font-semibold text-brand-foreground sm:text-4xl">
+        {passo.t}
+      </p>
+    </motion.div>
+  );
+}
+
 function Juridico() {
+
   return (
     <section className="relative overflow-hidden bg-brand px-6 py-32 sm:px-10 md:py-48">
       <div className="mx-auto grid max-w-6xl items-center gap-16 md:grid-cols-2">
