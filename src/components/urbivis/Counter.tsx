@@ -31,20 +31,23 @@ export function Counter({ to, decimals = 0, prefix = "", suffix = "", className 
       frame = requestAnimationFrame(tick);
     };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting) && !started) {
-          started = true;
-          observer.disconnect();
-          run();
-        }
-      },
-      { threshold: 0.2 },
-    );
-    observer.observe(el);
+    const check = () => {
+      if (started) return;
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.9 && r.bottom > 0) {
+        started = true;
+        window.removeEventListener("scroll", check);
+        run();
+      }
+    };
+
+    window.addEventListener("scroll", check, { passive: true });
+    const poll = window.setInterval(check, 200);
+    check();
 
     return () => {
-      observer.disconnect();
+      window.removeEventListener("scroll", check);
+      window.clearInterval(poll);
       cancelAnimationFrame(frame);
     };
   }, [to]);
