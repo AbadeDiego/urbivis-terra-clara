@@ -11,7 +11,7 @@ type Props = {
 
 export function Counter({ to, decimals = 0, prefix = "", suffix = "", className }: Props) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.6 });
+  const inView = useInView(ref, { once: true, amount: 0.2 });
   const [value, setValue] = useState(0);
 
   useEffect(() => {
