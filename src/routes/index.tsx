@@ -364,14 +364,16 @@ function Passo({
   index: number;
   progress: MotionValue<number>;
 }) {
+  const clamp = (v: number) => Math.min(1, Math.max(0, v));
   const start = index / passos.length;
   const end = (index + 1) / passos.length;
   const opacity = useTransform(
     progress,
-    [start - 0.06, start + 0.04, end - 0.05, end + 0.02],
+    [clamp(start - 0.06), clamp(start + 0.04), clamp(end - 0.05), clamp(end + 0.02)],
     [0, 1, 1, 0],
   );
   const y = useTransform(progress, [start, end], [24, -24]);
+
 
   return (
     <motion.div style={{ opacity, y }} className="absolute inset-0">

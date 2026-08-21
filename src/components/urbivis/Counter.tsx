@@ -1,4 +1,3 @@
-import { animate, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
 type Props = {
@@ -9,20 +8,49 @@ type Props = {
   className?: string;
 };
 
+const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+
 export function Counter({ to, decimals = 0, prefix = "", suffix = "", className }: Props) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.6 });
   const [value, setValue] = useState(0);
 
   useEffect(() => {
-    if (!inView) return;
-    const controls = animate(0, to, {
-      duration: 1.6,
-      ease: [0.16, 1, 0.3, 1],
-      onUpdate: (v) => setValue(v),
-    });
-    return () => controls.stop();
-  }, [inView, to]);
+    const el = ref.current;
+    if (!el) return;
+    let frame = 0;
+    let started = false;
+
+    const run = () => {
+      const start = performance.now();
+      const duration = 1600;
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - start) / duration);
+        setValue(to * easeOut(t));
+        if (t < 1) frame = requestAnimationFrame(tick);
+      };
+      frame = requestAnimationFrame(tick);
+    };
+
+    const check = () => {
+      if (started) return;
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.9 && r.bottom > 0) {
+        started = true;
+        window.removeEventListener("scroll", check);
+        run();
+      }
+    };
+
+    window.addEventListener("scroll", check, { passive: true });
+    const poll = window.setInterval(check, 200);
+    check();
+
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.clearInterval(poll);
+      cancelAnimationFrame(frame);
+    };
+  }, [to]);
 
   return (
     <span ref={ref} className={className}>
