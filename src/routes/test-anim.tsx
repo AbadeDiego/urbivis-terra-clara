@@ -46,6 +46,9 @@ function Test() {
     <div>
       <A />
       <B />
+      <WhatsAppButton>zap</WhatsAppButton>
+      <Counter to={73.45} decimals={2} prefix="R$ " />
     </div>
   );
 }
+
