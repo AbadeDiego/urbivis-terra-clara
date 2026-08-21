@@ -43,9 +43,22 @@ function B() {
   );
 }
 
+function C() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "22%"]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1.06, 1.18]);
+  return (
+    <div ref={ref} className="h-screen bg-muted">
+      <motion.div style={{ y, scale }} className="h-full w-full bg-accent" />
+    </div>
+  );
+}
+
 function Test() {
   return (
     <div>
+      <C />
       <A />
       <B />
       <WhatsAppButton>zap</WhatsAppButton>
@@ -53,4 +66,5 @@ function Test() {
     </div>
   );
 }
+
 
