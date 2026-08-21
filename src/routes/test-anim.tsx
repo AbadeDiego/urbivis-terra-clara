@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { WhatsAppButton } from "@/components/urbivis/WhatsAppButton";
+import { Counter } from "@/components/urbivis/Counter";
 
 export const Route = createFileRoute("/test-anim")({
   head: () => ({
