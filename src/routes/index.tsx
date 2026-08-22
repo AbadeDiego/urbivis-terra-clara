@@ -92,7 +92,7 @@ function Index() {
   useSmoothScroll();
 
   return (
-    <div className="relative overflow-x-hidden bg-background">
+    <div className="relative bg-background" style={{ overflowX: "clip" }}>
       <FloatingCta />
       <Hero />
       <Problema />
