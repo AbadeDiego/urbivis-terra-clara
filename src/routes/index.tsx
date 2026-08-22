@@ -318,15 +318,33 @@ function DuasFrentes() {
 }
 
 function ComoFunciona() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
+  const ref = useRef<HTMLElement>(null);
+  const [progresso, setProgresso] = useState(0);
+
+  useEffect(() => {
+    let raf = 0;
+    const medir = () => {
+      const el = ref.current;
+      if (el) {
+        const r = el.getBoundingClientRect();
+        const total = r.height - window.innerHeight;
+        const p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 0;
+        setProgresso(p);
+      }
+      raf = requestAnimationFrame(medir);
+    };
+    raf = requestAnimationFrame(medir);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  const ativo = Math.min(passos.length - 1, Math.floor(progresso * passos.length));
 
   return (
     <section ref={ref} className="relative h-[380svh] bg-brand">
       <div className="sticky top-0 flex h-[100svh] flex-col justify-center overflow-hidden px-6 sm:px-10">
-        <motion.div
-          style={{ scale: useTransform(scrollYProgress, [0, 1], [1.05, 1.15]) }}
+        <div
           className="absolute inset-0"
+          style={{ transform: `scale(${1.05 + progresso * 0.1})` }}
         >
           <img
             src={frenteCom}
@@ -337,7 +355,7 @@ function ComoFunciona() {
             className="h-full w-full object-cover opacity-45"
           />
           <div className="absolute inset-0 bg-brand/70" />
-        </motion.div>
+        </div>
 
         <div className="relative z-10 mx-auto w-full max-w-5xl">
           <h2 className="font-display text-xs tracking-[0.28em] text-brand-foreground/60 uppercase">
@@ -345,43 +363,39 @@ function ComoFunciona() {
           </h2>
           <div className="relative mt-8 h-[10rem] sm:h-[12rem]">
             {passos.map((p, i) => (
-              <Passo key={p.n} passo={p} index={i} progress={scrollYProgress} />
+              <div
+                key={p.n}
+                className="absolute inset-0 transition-all duration-500 ease-out"
+                style={{
+                  opacity: i === ativo ? 1 : 0,
+                  transform: `translateY(${i === ativo ? 0 : i < ativo ? -24 : 24}px)`,
+                  pointerEvents: i === ativo ? "auto" : "none",
+                }}
+              >
+                <span className="font-display text-5xl font-bold text-accent sm:text-6xl">
+                  {p.n}
+                </span>
+                <p className="mt-4 max-w-xl font-display text-2xl leading-snug font-semibold text-brand-foreground sm:text-4xl">
+                  {p.t}
+                </p>
+              </div>
             ))}
-
+          </div>
+          <div className="mt-10 flex gap-2">
+            {passos.map((p, i) => (
+              <span
+                key={p.n}
+                className="h-1 w-10 rounded-full transition-colors duration-300"
+                style={{
+                  backgroundColor:
+                    i <= ativo ? "hsl(var(--accent))" : "hsl(var(--brand-foreground) / 0.25)",
+                }}
+              />
+            ))}
           </div>
         </div>
       </div>
     </section>
-  );
-}
-
-function Passo({
-  passo,
-  index,
-  progress,
-}: {
-  passo: { n: string; t: string };
-  index: number;
-  progress: MotionValue<number>;
-}) {
-  const clamp = (v: number) => Math.min(1, Math.max(0, v));
-  const start = index / passos.length;
-  const end = (index + 1) / passos.length;
-  const opacity = useTransform(
-    progress,
-    [clamp(start - 0.06), clamp(start + 0.04), clamp(end - 0.05), clamp(end + 0.02)],
-    [0, 1, 1, 0],
-  );
-  const y = useTransform(progress, [start, end], [24, -24]);
-
-
-  return (
-    <motion.div style={{ opacity, y }} className="absolute inset-0">
-      <span className="font-display text-5xl font-bold text-accent sm:text-6xl">{passo.n}</span>
-      <p className="mt-4 max-w-xl font-display text-2xl leading-snug font-semibold text-brand-foreground sm:text-4xl">
-        {passo.t}
-      </p>
-    </motion.div>
   );
 }
 
