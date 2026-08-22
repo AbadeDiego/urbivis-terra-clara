@@ -500,11 +500,11 @@ function Contexto() {
         className="mx-auto max-w-4xl text-center"
       >
         <p className="font-display text-[3rem] leading-none font-bold text-brand-foreground sm:text-[7rem]">
-          <Counter to={73.45} decimals={2} prefix="R$ " />
+          <Counter to={10.8} decimals={1} suffix="%" />
         </p>
-        <p className="mt-4 font-display text-2xl font-semibold text-accent sm:text-4xl">bilhões</p>
+        <p className="mt-4 font-display text-2xl font-semibold text-accent sm:text-4xl">Crescimento médio na arrecadação.</p>
         <p className="mx-auto mt-8 max-w-md text-base text-brand-foreground/75">
-          É o potencial de IPTU que os municípios brasileiros deixam de arrecadar por ano.
+          Resultado direto de um cadastro atualizado.
         </p>
       </motion.div>
     </section>
