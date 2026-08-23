@@ -6,7 +6,14 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
+// Outside the Lovable sandbox (e.g. Docker/Coolify builds) we target a plain
+// Node server. Set NITRO_PRESET to override (defaults to node-server).
+const nodePreset = process.env.NITRO_PRESET || "node-server";
+
 export default defineConfig({
+  nitro: {
+    preset: nodePreset,
+  },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
