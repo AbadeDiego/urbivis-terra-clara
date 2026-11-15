@@ -112,7 +112,6 @@
   --sidebar-ring: oklch(0.704 0.04 256.788);
 }
 
-
 .dark {
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
@@ -175,3 +174,36 @@
   text-wrap: balance;
 }
 
+.urbivis-hero-shade {
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--brand) 64%, transparent),
+    transparent 30%,
+    color-mix(in oklab, var(--brand) 68%, transparent) 55%,
+    color-mix(in oklab, var(--brand) 96%, transparent) 100%
+  );
+}
+
+@media (width >= 48rem) {
+  .urbivis-hero-shade {
+    background:
+      linear-gradient(180deg, var(--brand) -32%, transparent 34%, var(--brand) 130%),
+      linear-gradient(90deg, color-mix(in oklab, var(--brand) 90%, transparent), transparent 85%);
+  }
+}
+
+.urbivis-map-line {
+  fill: none;
+  stroke: var(--outline-cyan);
+  stroke-width: 1.25;
+}
+
+.urbivis-map-highlight {
+  fill: oklch(0.84 0.15 78 / 24%);
+  stroke: oklch(0.87 0.15 78);
+  stroke-width: 2;
+}
+
+.urbivis-map-key {
+  background: oklch(0.87 0.15 78);
+}
