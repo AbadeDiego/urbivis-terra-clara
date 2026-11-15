@@ -645,25 +645,32 @@ function Beneficios() {
 }
 
 function Contexto() {
+  const reducedMotion = useReducedMotion();
+
   return (
-    <section className="bg-brand px-6 py-32 sm:px-10 md:py-44">
-      <motion.div
-        initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
-        whileInView={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
-        viewport={{ once: true, amount: 0.5 }}
-        transition={{ duration: 0.6, ease: EASE }}
-        className="mx-auto max-w-4xl text-center"
+    <section
+      id="arrecadacao"
+      aria-labelledby="arrecadacao-titulo"
+      className="bg-brand px-6 py-20 text-center text-brand-foreground sm:px-10 md:py-28"
+    >
+      <p className="text-xs font-semibold tracking-[0.16em] text-outline uppercase">
+        Cenário ilustrativo
+      </p>
+      <motion.p
+        initial={reducedMotion ? false : { scale: 0.96 }}
+        whileInView={{ scale: 1 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.45, ease: EASE }}
+        className="mt-4 font-display text-[clamp(4rem,13vw,7rem)] leading-none font-bold tracking-tight tabular-nums"
       >
-        <p className="font-display text-[3rem] leading-none font-bold text-brand-foreground sm:text-[7rem]">
-          <Counter to={10.8} decimals={1} suffix="%" />
-        </p>
-        <p className="mt-4 font-display text-2xl font-semibold text-accent sm:text-4xl">
-          Crescimento médio na arrecadação.
-        </p>
-        <p className="mx-auto mt-8 max-w-md text-base text-brand-foreground/75">
-          Resultado direto de um cadastro atualizado.
-        </p>
-      </motion.div>
+        10,8%
+      </motion.p>
+      <h2 id="arrecadacao-titulo" className="mt-4 text-2xl font-semibold sm:text-4xl">
+        Crescimento na arrecadação
+      </h2>
+      <p className="mx-auto mt-3 max-w-md text-sm text-brand-foreground/80 sm:text-base">
+        Após a atualização do cadastro imobiliário.
+      </p>
     </section>
   );
 }
