@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 type Props = {
   to: number;
   decimals?: number;
+  duration?: number;
   prefix?: string;
   suffix?: string;
   className?: string;
@@ -10,7 +11,14 @@ type Props = {
 
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
 
-export function Counter({ to, decimals = 0, prefix = "", suffix = "", className }: Props) {
+export function Counter({
+  to,
+  decimals = 0,
+  duration = 1600,
+  prefix = "",
+  suffix = "",
+  className,
+}: Props) {
   const ref = useRef<HTMLSpanElement>(null);
   const [value, setValue] = useState(0);
 
@@ -22,7 +30,6 @@ export function Counter({ to, decimals = 0, prefix = "", suffix = "", className 
 
     const run = () => {
       const start = performance.now();
-      const duration = 1600;
       const tick = (now: number) => {
         const t = Math.min(1, (now - start) / duration);
         setValue(to * easeOut(t));
@@ -50,7 +57,7 @@ export function Counter({ to, decimals = 0, prefix = "", suffix = "", className 
       window.clearInterval(poll);
       cancelAnimationFrame(frame);
     };
-  }, [to]);
+  }, [to, duration]);
 
   return (
     <span ref={ref} className={className}>

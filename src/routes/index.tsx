@@ -10,7 +10,7 @@ import {
 import { Counter } from "@/components/urbivis/Counter";
 import { WhatsAppButton } from "@/components/urbivis/WhatsAppButton";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
-import { Banknote, Clock, FileCheck, Map, ShieldCheck, Wallet } from "lucide-react";
+import { Layers2, MapPinned, Timer, Wallet } from "lucide-react";
 
 import heroBairro from "@/assets/bairro-aereo.webp";
 import heroBairroMobile from "@/assets/bairro-aereo-mobile.webp";
@@ -90,12 +90,20 @@ const passos = [
 ];
 
 const beneficios = [
-  { icon: Wallet, t: "Mais receita sem criar imposto novo" },
-  { icon: Map, t: "Mapa completo da cidade real" },
-  { icon: ShieldCheck, t: "Decisão apoiada em prova visual" },
-  { icon: Banknote, t: "Cobrança mais justa entre vizinhos" },
-  { icon: FileCheck, t: "Base pronta para obras e zoneamento" },
-  { icon: Clock, t: "Resultado em semanas, não anos" },
+  {
+    icon: Timer,
+    categoria: "Tempo",
+    valor: passos.length,
+    texto: "etapas para atualizar o cadastro",
+  },
+  {
+    icon: Layers2,
+    categoria: "Praticidade",
+    valor: 2,
+    texto: "formas de começar, com ou sem base",
+  },
+  { icon: Wallet, categoria: "Custos", valor: 0, texto: "trocas de sistema", destaque: true },
+  { icon: MapPinned, categoria: "Planejamento", valor: 1, texto: "mapa para priorizar vistorias" },
 ];
 
 const faq = [
@@ -559,35 +567,66 @@ function Juridico() {
 }
 
 function Beneficios() {
+  const reducedMotion = useReducedMotion();
+
   return (
-    <section className="bg-background px-6 py-28 sm:px-10 md:py-40">
+    <section
+      aria-labelledby="beneficios-titulo"
+      className="bg-background px-5 py-20 sm:px-10 md:py-28"
+    >
       <div className="mx-auto max-w-6xl">
         <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          id="beneficios-titulo"
+          initial={reducedMotion ? false : { y: 20 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: 0.5, ease: EASE }}
-          className="max-w-lg font-display text-3xl leading-tight font-semibold sm:text-4xl"
+          transition={{ duration: 0.45, ease: EASE }}
+          className="max-w-lg text-3xl leading-tight font-semibold sm:text-5xl"
         >
           O que a prefeitura ganha
         </motion.h2>
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-8 grid grid-cols-2 gap-3 sm:mt-10 sm:gap-5 lg:grid-cols-4">
           {beneficios.map((b, i) => (
-            <motion.div
-              key={b.t}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 0.45, delay: i * 0.06, ease: EASE }}
-              whileHover={{ scale: 1.03, y: -4 }}
-              className="rounded-3xl bg-surface p-8 shadow-card transition-shadow duration-300 hover:shadow-card-hover"
+            <motion.li
+              key={b.categoria}
+              initial={reducedMotion ? false : { y: 14 }}
+              whileInView={{ y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.4, delay: i * 0.05, ease: EASE }}
+              className={`flex min-w-0 flex-col rounded-2xl p-3.5 shadow-card ring-1 ring-border transition-[translate,box-shadow] duration-300 hover:shadow-card-hover motion-safe:hover:-translate-y-1 sm:rounded-3xl sm:p-6 ${b.destaque ? "bg-brand text-brand-foreground" : "bg-surface text-brand"}`}
             >
-              <b.icon className="size-7 text-accent" strokeWidth={1.4} />
-              <p className="mt-6 font-display text-lg leading-snug font-semibold">{b.t}</p>
-            </motion.div>
+              <div className="flex items-center justify-between gap-1">
+                <h3 className="text-[0.6875rem] font-semibold tracking-wide sm:text-sm">
+                  {b.categoria}
+                </h3>
+                <b.icon
+                  aria-hidden="true"
+                  className={`size-7 shrink-0 rounded-lg p-1.5 sm:size-9 sm:p-2 ${b.destaque ? "bg-brand-foreground/10 text-outline" : "bg-secondary text-brand"}`}
+                  strokeWidth={1.75}
+                />
+              </div>
+              <div className="mt-5 sm:mt-8">
+                <span className="sr-only">{b.valor} </span>
+                <span
+                  aria-hidden="true"
+                  className="block font-display text-6xl leading-[0.9] font-bold tracking-tight tabular-nums sm:text-8xl"
+                >
+                  {reducedMotion || b.valor === 0 ? (
+                    b.valor
+                  ) : (
+                    <Counter to={b.valor} duration={550} />
+                  )}
+                </span>
+                <p
+                  className={`mt-3 max-w-40 text-xs leading-snug sm:mt-4 sm:text-base ${b.destaque ? "text-brand-foreground/85" : "text-muted-foreground"}`}
+                >
+                  {b.texto}
+                </p>
+              </div>
+            </motion.li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
