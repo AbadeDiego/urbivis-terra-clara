@@ -93,14 +93,17 @@ const beneficios = [
   {
     icon: Timer,
     categoria: "Tempo",
-    valor: passos.length,
-    texto: "etapas para atualizar o cadastro",
+    valor: 50,
+    sufixo: "%",
+    texto: "menos tempo na triagem",
+    nota: "Simulação de 10 para 5 dias",
   },
   {
     icon: Layers2,
     categoria: "Praticidade",
-    valor: 2,
-    texto: "formas de começar, com ou sem base",
+    valor: 100,
+    sufixo: "%",
+    texto: "dos dados entregues em formato digital",
   },
   { icon: Wallet, categoria: "Custos", valor: 0, texto: "trocas de sistema", destaque: true },
   { icon: MapPinned, categoria: "Planejamento", valor: 1, texto: "mapa para priorizar vistorias" },
@@ -607,22 +610,31 @@ function Beneficios() {
                 />
               </div>
               <div className="mt-5 sm:mt-8">
-                <span className="sr-only">{b.valor} </span>
+                <span className="sr-only">
+                  {b.valor}
+                  {b.sufixo}{" "}
+                </span>
                 <span
                   aria-hidden="true"
-                  className="block font-display text-6xl leading-[0.9] font-bold tracking-tight tabular-nums sm:text-8xl"
+                  className="block font-display text-[clamp(2.5rem,12vw,3.75rem)] leading-[0.9] font-bold tracking-[-0.055em] whitespace-nowrap tabular-nums sm:text-[clamp(3.75rem,7vw,6rem)]"
                 >
                   {reducedMotion || b.valor === 0 ? (
                     b.valor
                   ) : (
                     <Counter to={b.valor} duration={550} />
                   )}
+                  {b.sufixo && <span className="ml-0.5 text-[0.45em]">{b.sufixo}</span>}
                 </span>
                 <p
                   className={`mt-3 max-w-40 text-xs leading-snug sm:mt-4 sm:text-base ${b.destaque ? "text-brand-foreground/85" : "text-muted-foreground"}`}
                 >
                   {b.texto}
                 </p>
+                {b.nota && (
+                  <p className="mt-2 text-[0.6875rem] leading-snug font-medium text-muted-foreground sm:text-xs">
+                    {b.nota}
+                  </p>
+                )}
               </div>
             </motion.li>
           ))}
